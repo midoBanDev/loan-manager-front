@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   User as UserIcon, 
   Bell as BellIcon,
@@ -8,7 +8,8 @@ import {
   LogOut as LogOutIcon,
   Download as DownloadIcon,
   Trash2 as TrashIcon,
-  Keyboard as KeyboardIcon
+  Keyboard as KeyboardIcon, 
+  UserRound  as Mypage
 } from 'lucide-react'
 
 export const Home = () => {
@@ -16,9 +17,11 @@ export const Home = () => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const navigate = useNavigate()
 
-  const handleLoginClick = () => {
-    setIsLoggedIn(true)
-  }
+  // 컴포넌트 마운트 시 로그인 상태 확인
+  useEffect(() => {
+    const loginStatus = localStorage.getItem('isLoggedIn') === 'true'
+    setIsLoggedIn(loginStatus)
+  }, [])
 
   const handleStartClick = () => {
     if (!isLoggedIn) {
@@ -26,6 +29,15 @@ export const Home = () => {
       return
     }
     navigate('/dashboard')
+  }
+
+  const handleMypageClick = () => {
+    navigate('/dashboard')
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn')
+    setIsLoggedIn(false)
   }
 
   return (
@@ -47,12 +59,12 @@ export const Home = () => {
             <div className="space-x-4 flex items-center">
               {!isLoggedIn ? (
                 <>
-                  <button 
-                    onClick={handleLoginClick}
+                  <Link 
+                    to="/login"
                     className="text-white hover:text-blue-100 transition-colors"
                   >
                     로그인
-                  </button>
+                  </Link>
                   <Link 
                     to="/signup" 
                     className="px-6 py-2 bg-white text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
@@ -66,14 +78,16 @@ export const Home = () => {
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                     className="flex items-center space-x-3 text-white hover:text-blue-100 transition-colors"
                   >
+                    <div onClick={handleMypageClick} className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white">
+                      my
+                    </div> 
                     <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-white">
                       이
                     </div>
-                    <span>이우기</span>
                   </button>
                   
                   {isProfileMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2">
+                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-lg shadow-lg py-1">
                       <div className="px-4 py-2 border-b border-gray-100">
                         <div className="flex items-center space-x-3">
                           <div className="w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-white text-lg">
@@ -104,8 +118,8 @@ export const Home = () => {
                           도움말
                         </Link>
                         <button
-                          onClick={() => setIsLoggedIn(false)}
-                          className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 w-full"
+                          onClick={handleLogout}
+                          className="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center"
                         >
                           <LogOutIcon className="w-4 h-4 mr-3" />
                           로그아웃

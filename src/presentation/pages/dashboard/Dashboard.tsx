@@ -20,92 +20,155 @@ import {
   Trash2 as TrashIcon,
   Keyboard as KeyboardIcon,
   Sun as SunIcon,
-  Moon as MoonIcon
+  Moon as MoonIcon,
+  ChevronLeft as CollapseIcon,
+  ChevronRight as ExpandIcon,
+  BookOpen as BookOpenIcon
 } from 'lucide-react'
 
 export const Dashboard = () => {
   const { theme, toggleTheme } = useTheme()
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
-  const [selectedSpace, setSelectedSpace] = useState<string | null>(null)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null)
+
+  const toggleMenu = (menu: string) => {
+    setActiveMenu(activeMenu === menu ? null : menu)
+  }
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-slate-900">
       {/* Sidebar */}
-      <aside className="w-64 bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700">
+      <aside className={`${isSidebarCollapsed ? 'w-20' : 'w-64'} bg-white dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 transition-all duration-300`}>
         <div className="h-full flex flex-col">
-          {/* 워크스페이스 선택 */}
-          <div className="p-4 border-b border-gray-200 dark:border-slate-700">
-            <button className="w-full flex items-center justify-between text-left">
+          {/* 워크스페이스 헤더 */}
+          <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex items-center justify-between">
+            {!isSidebarCollapsed && (
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-lg bg-yellow-400 flex items-center justify-center text-white">
-                  이
+                <div className="w-8 h-8 rounded-lg bg-blue-400 flex items-center justify-center text-white">
+                  G
                 </div>
-                <span className="font-medium">이우기's Workspace</span>
+                <span className="font-medium">GrowTogether</span>
               </div>
+            )}
+            <button 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
+            >
+              {isSidebarCollapsed ? <ExpandIcon className="w-5 h-5" /> : <CollapseIcon className="w-5 h-5" />}
             </button>
           </div>
 
           {/* 메인 메뉴 */}
-          <nav className="flex-1 p-4 space-y-1">
+          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             <Link to="/dashboard" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <HomeIcon className="w-5 h-5 mr-3" />
-              Home
+              <HomeIcon className="w-5 h-5" />
+              {!isSidebarCollapsed && <span className="ml-3">홈</span>}
             </Link>
-            <Link to="/inbox" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <InboxIcon className="w-5 h-5 mr-3" />
-              Inbox
-            </Link>
-            <Link to="/docs" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <FileTextIcon className="w-5 h-5 mr-3" />
-              Docs
-            </Link>
-            <Link to="/dashboards" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <DashboardIcon className="w-5 h-5 mr-3" />
-              Dashboards
-            </Link>
-            <Link to="/clips" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <VideoIcon className="w-5 h-5 mr-3" />
-              Clips
-            </Link>
-            <Link to="/timesheets" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <ClockIcon className="w-5 h-5 mr-3" />
-              Timesheets
-            </Link>
-            <button className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 w-full">
-              <MoreIcon className="w-5 h-5 mr-3" />
-              More
-            </button>
+
+            {/* 목표 관리 */}
+            <div>
+              <button 
+                onClick={() => toggleMenu('goals')}
+                className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+              >
+                <FileTextIcon className="w-5 h-5" />
+                {!isSidebarCollapsed && (
+                  <>
+                    <span className="ml-3 flex-1 text-left">목표 관리</span>
+                    <PlusIcon className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+              {!isSidebarCollapsed && activeMenu === 'goals' && (
+                <div className="ml-4 mt-1 space-y-1">
+                  <Link to="/goals/list" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    목표 목록
+                  </Link>
+                  <Link to="/goals/create" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    목표 생성
+                  </Link>
+                  <Link to="/goals/analytics" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    목표 분석
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* 커뮤니티 */}
+            <div>
+              <button 
+                onClick={() => toggleMenu('community')}
+                className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+              >
+                <UserIcon className="w-5 h-5" />
+                {!isSidebarCollapsed && (
+                  <>
+                    <span className="ml-3 flex-1 text-left">커뮤니티</span>
+                    <PlusIcon className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+              {!isSidebarCollapsed && activeMenu === 'community' && (
+                <div className="ml-4 mt-1 space-y-1">
+                  <Link to="/community/groups" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    그룹
+                  </Link>
+                  <Link to="/community/challenges" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    챌린지
+                  </Link>
+                  <Link to="/community/mentoring" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    멘토링
+                  </Link>
+                  <Link to="/community/feed" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    피드
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* 학습/콘텐츠 */}
+            <div>
+              <button 
+                onClick={() => toggleMenu('learning')}
+                className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+              >
+                <BookOpenIcon className="w-5 h-5" />
+                {!isSidebarCollapsed && (
+                  <>
+                    <span className="ml-3 flex-1 text-left">학습/콘텐츠</span>
+                    <PlusIcon className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+              {!isSidebarCollapsed && activeMenu === 'learning' && (
+                <div className="ml-4 mt-1 space-y-1">
+                  <Link to="/learning/courses" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    강의
+                  </Link>
+                  <Link to="/learning/articles" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    아티클
+                  </Link>
+                  <Link to="/learning/webinars" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    웨비나
+                  </Link>
+                  <Link to="/learning/resources" className="flex items-center px-3 py-2 text-sm text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+                    자료실
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Spaces 섹션 */}
+          {/* 하단 메뉴 */}
           <div className="p-4 border-t border-gray-200 dark:border-slate-700">
-            <div className="flex items-center justify-between mb-2">
-              <h2 className="text-sm font-medium text-gray-600 dark:text-gray-400">Spaces</h2>
-              <div className="flex items-center space-x-2">
-                <button className="p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">
-                  <SearchIcon className="w-4 h-4" />
-                </button>
-                <button className="p-1 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">
-                  <PlusIcon className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            <div className="space-y-1">
-              <button
-                className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
-                onClick={() => setSelectedSpace('everything')}
-              >
-                <span className="w-5 h-5 mr-3">✨</span>
-                Everything
-              </button>
-              <button
-                className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
-                onClick={() => setSelectedSpace('space')}
-              >
-                <span className="w-5 h-5 mr-3">S</span>
-                Space
-              </button>
-            </div>
+            <button
+              className="w-full flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700"
+              onClick={toggleTheme}
+            >
+              {theme === 'dark' ? <SunIcon className="w-5 h-5" /> : <MoonIcon className="w-5 h-5" />}
+              {!isSidebarCollapsed && <span className="ml-3">테마 변경</span>}
+            </button>
           </div>
         </div>
       </aside>

@@ -1,15 +1,24 @@
 import { Link } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
 import { useNavigate } from 'react-router-dom'
+import { FormEvent } from 'react'
 
 export const Login = () => {
   const navigate = useNavigate()
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    // 로그인 상태를 localStorage에 저장
+    localStorage.setItem('isLoggedIn', 'true')
+    // 홈으로 이동
+    navigate('/')
+  }
+
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
-      // TODO: 백엔드에 Google 인증 정보를 전송하고 JWT 토큰을 받아옴
       console.log('Google 로그인 성공:', credentialResponse)
-      navigate('/dashboard')
+      localStorage.setItem('isLoggedIn', 'true')
+      navigate('/')
     } catch (error) {
       console.error('Google 로그인 실패:', error)
     }
@@ -23,7 +32,7 @@ export const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
       <div className="w-full max-w-md p-8 rounded-xl bg-white/70 dark:bg-slate-800/70 backdrop-blur-md shadow-lg">
         <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-6">로그인</h1>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
               이메일
