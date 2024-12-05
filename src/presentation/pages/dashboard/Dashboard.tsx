@@ -61,11 +61,6 @@ export const Dashboard = () => {
 
           {/* 메인 메뉴 */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            <Link to="/dashboard" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
-              <HomeIcon className="w-5 h-5" />
-              {!isSidebarCollapsed && <span className="ml-3">홈</span>}
-            </Link>
-
             {/* 목표 관리 */}
             <div>
               <button 
@@ -177,6 +172,11 @@ export const Dashboard = () => {
         {/* Header */}
         <header className="h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700">
           <div className="h-full px-4 flex items-center justify-end space-x-4">
+
+            <Link to="/" className="flex items-center px-3 py-2 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700">
+              <HomeIcon className="w-5 h-5" />
+            </Link>
+
             <button
               className="p-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg"
               onClick={toggleTheme}

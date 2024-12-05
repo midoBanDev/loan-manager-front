@@ -21,17 +21,13 @@ export const Home = () => {
   useEffect(() => {
     const loginStatus = localStorage.getItem('isLoggedIn') === 'true'
     setIsLoggedIn(loginStatus)
-  }, [])
+  }, [localStorage.getItem('isLoggedIn')])
 
   const handleStartClick = () => {
     if (!isLoggedIn) {
       navigate('/login')
       return
     }
-    navigate('/dashboard')
-  }
-
-  const handleMypageClick = () => {
     navigate('/dashboard')
   }
 
@@ -78,9 +74,9 @@ export const Home = () => {
                     onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
                     className="flex items-center space-x-3 text-white hover:text-blue-100 transition-colors"
                   >
-                    <div onClick={handleMypageClick} className="w-8 h-8 rounded-full bg-black flex items-center justify-center text-white">
-                      my
-                    </div> 
+                    <Link to="/dashboard" className="w-20 h-8 rounded-full bg-black flex items-center justify-center text-white">
+                      마이페이지
+                    </Link>
                     <div className="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-white">
                       이
                     </div>
