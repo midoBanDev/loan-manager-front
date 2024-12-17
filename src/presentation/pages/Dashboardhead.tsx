@@ -8,7 +8,7 @@ import {
   Moon as MoonIcon,
 } from 'lucide-react'
 
-export const Dashboardhead = () => {
+export const DashboardHead = () => {
   const { theme, toggleTheme } = useTheme()
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
