@@ -1,5 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { data, Link, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { AuthAPI } from '@api/auth'
+import { Profile } from '@pages/profile'
 import { 
   User as UserIcon, 
   Bell as BellIcon,
@@ -29,11 +31,6 @@ export const Home = () => {
       return
     }
     navigate('/dashboard')
-  }
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn')
-    setIsLoggedIn(false)
   }
 
   return (
@@ -96,30 +93,9 @@ export const Home = () => {
                         </div>
                       </div>
                       
+                      {/* 프로필 페이지 */}
                       <div className="py-2">
-                        <Link to="/profile" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <UserIcon className="w-4 h-4 mr-3" />
-                          프로필
-                        </Link>
-                        <Link to="/settings" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <SettingsIcon className="w-4 h-4 mr-3" />
-                          설정
-                        </Link>
-                        <Link to="/notifications" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <BellIcon className="w-4 h-4 mr-3" />
-                          알림 설정
-                        </Link>
-                        <Link to="/help" className="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <HelpIcon className="w-4 h-4 mr-3" />
-                          도움말
-                        </Link>
-                        <button
-                          onClick={handleLogout}
-                          className="w-full px-4 py-2 text-left text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 flex items-center"
-                        >
-                          <LogOutIcon className="w-4 h-4 mr-3" />
-                          로그아웃
-                        </button>
+                        <Profile />
                       </div>
                     </div>
                   )}
