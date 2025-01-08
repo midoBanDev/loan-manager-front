@@ -1,6 +1,7 @@
 import { Sidemenu } from './Sidemenu'
 import { DashboardHead } from './DashboardHead'
 import { useState, createElement } from 'react'
+import { PersonCreateForm } from './person/PersonCreateForm'
 
 // 임시 컴포넌트들
 const PersonCreate = () => <div>고객 등록 컴포넌트</div>
@@ -19,7 +20,7 @@ export const Dashboard = () => {
 
   // 컴포넌트 매핑
   const componentMap: { [key: string]: React.ComponentType } = {
-    'person/create': PersonCreate,
+    'person/create': PersonCreateForm,
     'person/list': PersonList,
     'apply/create': ApplyCreate,
     'apply/list': ApplyList,
