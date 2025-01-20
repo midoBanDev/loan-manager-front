@@ -1,20 +1,11 @@
-# 소스 다운로드 스테이지 분리
-FROM alpine/git as source
-WORKDIR /app
-# 소스 코드 다운로드
-RUN git clone https://github.com/midoBanDev/loan-manager-front.git .
-
-#----------------------------------------------------------------------
-
 # 패키지 설치 스테이지 분리
-# 베이스 이미지를 분리하면 변경된 소스 코드의 영향을 받지 않는다.
 FROM node:22.11.0 as dependencies
 WORKDIR /app
 
 # 패키지 레지스트리 저장소 변경.
 RUN npm config set registry https://registry.npmmirror.com
 
-COPY --from=source /app/package*.json ./
+COPY package*.json /app/package*.json ./
 
 # BuildKit 캐시 마운트 사용하여 캐시 저장
 # maxsockets 10 으로 동시 다운로드 수 제한
@@ -27,15 +18,17 @@ RUN --mount=type=cache,target=/root/.npm,id=npm \
 FROM node:22.11.0 as build
 WORKDIR /app
 
-COPY --from=source /app .
+# 소스 코드 복사
+COPY . .
  
+# 패키지 모듈 복사
 COPY --from=dependencies /app/node_modules ./node_modules
 
 # 빌드 시 build-arg 로 환경변수 전달
 # GOOGLE_CLIENT_ID는 빌드 전에 전달되어야 한다.
 # node 기반의 프로젝트는 Java 기반 프로젝트와 다르게 빌드 전 환경변수를 설정한 후 빌드되어야 한다.
-ARG REACT_APP_GOOGLE_CLIENT_ID
-ENV REACT_APP_GOOGLE_CLIENT_ID=${REACT_APP_GOOGLE_CLIENT_ID}
+ARG GOOGLE_CLIENT_ID
+ENV REACT_APP_GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
 
 RUN npm run build
 
@@ -69,8 +62,11 @@ RUN apk update && apk add --no-cache \
 COPY nginx.conf /etc/nginx/conf.d/default.conf.template
 
 # 환경변수 기본값 설정
-ENV BACKEND_HOST=api-server
-ENV BACKEND_PORT=8080
+ARG BACKEND_HOST
+ARG BACKEND_PORT
+
+ENV BACKEND_HOST=${BACKEND_HOST}
+ENV BACKEND_PORT=${BACKEND_PORT}
 
 # docker-entrypoint.sh 파일을 복사하고 실행 권한 부여
 COPY docker-entrypoint.sh /usr/local/bin/
