@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-push-dev:
     runs-on: ubuntu-latest  
-    if: 1 == 2
+    if: 1 == 3
     environment: development
 
     steps:
@@ -45,7 +45,7 @@ jobs:
             BACKEND_HOST=${{ secrets.BACKEND_HOST }}
             BACKEND_PORT=${{ secrets.BACKEND_PORT }}
         push: true  # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-api-dev:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-front-dev:${{ github.sha }}
 
 
   build-and-push-prod:
@@ -86,4 +86,4 @@ jobs:
             BACKEND_HOST=${{ secrets.BACKEND_HOST }}
             BACKEND_PORT=${{ secrets.BACKEND_PORT }}
         push: true  # 이미지를 레지스트리에 푸시합니다.
-        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-api-prod:${{ github.sha }}
+        tags: ${{ secrets.DOCKERHUB_USERNAME }}/loan-front-prod:${{ github.sha }}
