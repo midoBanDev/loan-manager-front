@@ -5,7 +5,7 @@ WORKDIR /app
 # 패키지 레지스트리 저장소 변경.
 RUN npm config set registry https://registry.npmmirror.com
 
-COPY package*.json /app/package*.json ./
+COPY package*.json ./
 
 # BuildKit 캐시 마운트 사용하여 캐시 저장
 # maxsockets 10 으로 동시 다운로드 수 제한
