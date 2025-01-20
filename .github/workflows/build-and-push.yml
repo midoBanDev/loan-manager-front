@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-push-dev:
     runs-on: ubuntu-latest  
-    if: 1 == 2
+    if: 1 == 3
     environment: development
 
     steps:
