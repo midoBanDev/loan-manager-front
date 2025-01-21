@@ -5,11 +5,6 @@ import axios from 'axios'
  * apiClient 인터셉터는 모든 HTTP 요청이 서버로 전송되기 전에 자동으로 실행되는 미들웨어 같은 역할을 한다.
  */
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:8080',
-  timeout: 5000,
-  headers: {
-    'Content-Type': 'application/json'
-  }
 })
 
 /**
